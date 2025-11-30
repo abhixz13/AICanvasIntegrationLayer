@@ -1,5 +1,6 @@
-import { Home, Server, CheckSquare, Settings, Zap } from "lucide-react";
+import { Home, Server, CheckSquare, Settings, Zap, ChevronRight } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,19 +10,32 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const navItems = [
   { title: "MCP Catalog", url: "/", icon: Home },
-  { title: "Skill Catalog", url: "/skills", icon: Zap },
   { title: "My MCP Servers", url: "/my-servers", icon: Server },
   { title: "Approvals", url: "/approvals", icon: CheckSquare },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
+const skillsSubItems = [
+  { title: "Skill Catalogue", url: "/skills" },
+  { title: "Manage", url: "/skills/manage" },
+];
+
 export function AppSidebar() {
   const { open } = useSidebar();
+  const [skillsOpen, setSkillsOpen] = useState(false);
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border">
@@ -59,6 +73,36 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              
+              <Collapsible open={skillsOpen} onOpenChange={setSkillsOpen} asChild>
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton className="flex items-center gap-3">
+                      <Zap className="h-4 w-4" />
+                      <span>Skills</span>
+                      <ChevronRight className={`ml-auto h-4 w-4 transition-transform ${skillsOpen ? 'rotate-90' : ''}`} />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {skillsSubItems.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.title}>
+                          <SidebarMenuSubButton asChild>
+                            <NavLink
+                              to={subItem.url}
+                              end
+                              className="flex items-center"
+                              activeClassName="bg-accent text-accent-foreground font-medium"
+                            >
+                              <span>{subItem.title}</span>
+                            </NavLink>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
