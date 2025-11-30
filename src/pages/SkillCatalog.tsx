@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { SkillDetailModal } from "@/components/SkillDetailModal";
 import {
   Table,
@@ -18,9 +19,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, AlertTriangle } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Search, AlertTriangle, MoreVertical, Eye, Copy, AlertCircle } from "lucide-react";
 import { mockSkills } from "@/data/mockSkills";
 import { Skill, RiskType, LifecycleState } from "@/types/skill";
+import { toast } from "sonner";
 
 export default function SkillCatalog() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -74,6 +82,19 @@ export default function SkillCatalog() {
       skill.lifecycle_state === "draft" ||
       skill.lifecycle_state === "in_review"
     );
+  };
+
+  const handleShowDetail = (skill: Skill) => {
+    setSelectedSkill(skill);
+    setModalOpen(true);
+  };
+
+  const handleCloneModify = (skill: Skill) => {
+    toast.success(`Cloning skill: ${skill.name}`);
+  };
+
+  const handleDeprecate = (skill: Skill) => {
+    toast.success(`Skill "${skill.name}" has been deprecated`);
   };
 
   return (
@@ -135,6 +156,7 @@ export default function SkillCatalog() {
               <TableHead className="text-right">Call Volume (7d)</TableHead>
               <TableHead className="text-right">Success Rate</TableHead>
               <TableHead>Last Updated</TableHead>
+              <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -146,16 +168,9 @@ export default function SkillCatalog() {
               </TableRow>
             ) : (
               filteredSkills.map((skill) => (
-                <TableRow 
-                  key={skill.id} 
-                  className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => {
-                    setSelectedSkill(skill);
-                    setModalOpen(true);
-                  }}
-                >
+                <TableRow key={skill.id} className="hover:bg-muted/50">
                   <TableCell>
-                    <div className="font-medium text-foreground hover:text-primary flex items-center gap-2">
+                    <div className="font-medium text-foreground flex items-center gap-2">
                       {skill.name}
                       {hasWarning(skill) && (
                         <AlertTriangle className="h-4 w-4 text-amber-500" />
@@ -196,8 +211,36 @@ export default function SkillCatalog() {
                   <TableCell className="text-sm text-muted-foreground">
                     {new Date(skill.updated_at).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {new Date(skill.updated_at).toLocaleDateString()}
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleShowDetail(skill)}>
+                          <Eye className="h-4 w-4 mr-2" />
+                          Show Detail
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleCloneModify(skill)}>
+                          <Copy className="h-4 w-4 mr-2" />
+                          Clone & Modify
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleDeprecate(skill)}
+                          className="text-destructive"
+                        >
+                          <AlertCircle className="h-4 w-4 mr-2" />
+                          Deprecate
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))
