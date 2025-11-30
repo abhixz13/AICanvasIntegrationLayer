@@ -8,6 +8,9 @@ import { AppSidebar } from "@/components/AppSidebar";
 import MCPCatalog from "./pages/MCPCatalog";
 import GuidedCreate from "./pages/GuidedCreate";
 import RegisterWizard from "./pages/RegisterWizard";
+import SkillCatalog from "./pages/SkillCatalog";
+import SkillDetail from "./pages/SkillDetail";
+import NewSkillWizard from "./pages/NewSkillWizard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +33,9 @@ const App = () => (
                   <Route path="/" element={<MCPCatalog />} />
                   <Route path="/register/guided" element={<GuidedCreate />} />
                   <Route path="/register/wizard" element={<RegisterWizard />} />
+                  <Route path="/skills" element={<SkillCatalog />} />
+                  <Route path="/skills/:id" element={<SkillDetail />} />
+                  <Route path="/new-skill" element={<NewSkillWizard />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

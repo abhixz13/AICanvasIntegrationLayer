@@ -1,4 +1,4 @@
-import { Home, Server, CheckSquare, Settings } from "lucide-react";
+import { Home, Server, CheckSquare, Settings, Zap } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
   Sidebar,
@@ -14,6 +14,7 @@ import {
 
 const navItems = [
   { title: "MCP Catalog", url: "/", icon: Home },
+  { title: "Skill Catalog", url: "/skills", icon: Zap },
   { title: "My MCP Servers", url: "/my-servers", icon: Server },
   { title: "Approvals", url: "/approvals", icon: CheckSquare },
   { title: "Settings", url: "/settings", icon: Settings },
