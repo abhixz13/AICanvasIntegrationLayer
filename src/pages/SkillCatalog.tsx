@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SkillDetailModal } from "@/components/SkillDetailModal";
 import {
   Table,
   TableBody,
@@ -18,13 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Search, MoreVertical, AlertTriangle } from "lucide-react";
+import { Search, AlertTriangle } from "lucide-react";
 import { mockSkills } from "@/data/mockSkills";
 import { Skill, RiskType, LifecycleState } from "@/types/skill";
 
@@ -32,6 +26,8 @@ export default function SkillCatalog() {
   const [searchQuery, setSearchQuery] = useState("");
   const [lifecycleFilter, setLifecycleFilter] = useState<string>("all");
   const [riskFilter, setRiskFilter] = useState<string>("all");
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const filteredSkills = mockSkills.filter((skill) => {
     const matchesSearch =
@@ -138,30 +134,33 @@ export default function SkillCatalog() {
               <TableHead>Risk Type</TableHead>
               <TableHead className="text-right">Call Volume (7d)</TableHead>
               <TableHead className="text-right">Success Rate</TableHead>
-              <TableHead>Last Incident</TableHead>
-              <TableHead className="w-[50px]"></TableHead>
+              <TableHead>Last Updated</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredSkills.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                   No skills found
                 </TableCell>
               </TableRow>
             ) : (
               filteredSkills.map((skill) => (
-                <TableRow key={skill.id} className="cursor-pointer hover:bg-muted/50">
+                <TableRow 
+                  key={skill.id} 
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => {
+                    setSelectedSkill(skill);
+                    setModalOpen(true);
+                  }}
+                >
                   <TableCell>
-                    <Link
-                      to={`/skills/${skill.id}`}
-                      className="font-medium text-foreground hover:text-primary flex items-center gap-2"
-                    >
+                    <div className="font-medium text-foreground hover:text-primary flex items-center gap-2">
                       {skill.name}
                       {hasWarning(skill) && (
                         <AlertTriangle className="h-4 w-4 text-amber-500" />
                       )}
-                    </Link>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Link to={`/mcp/${skill.mcp_server_id}`}>
@@ -195,26 +194,10 @@ export default function SkillCatalog() {
                     </span>
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {skill.last_incident_at
-                      ? new Date(skill.last_incident_at).toLocaleDateString()
-                      : "None"}
+                    {new Date(skill.updated_at).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>Edit Skill</DropdownMenuItem>
-                        <DropdownMenuItem>Run Test</DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
-                          Deprecate
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                  <TableCell className="text-sm text-muted-foreground">
+                    {new Date(skill.updated_at).toLocaleDateString()}
                   </TableCell>
                 </TableRow>
               ))
@@ -222,6 +205,12 @@ export default function SkillCatalog() {
           </TableBody>
         </Table>
       </div>
+
+      <SkillDetailModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        skill={selectedSkill}
+      />
     </div>
   );
 }

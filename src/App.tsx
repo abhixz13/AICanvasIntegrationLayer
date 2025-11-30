@@ -11,6 +11,7 @@ import RegisterWizard from "./pages/RegisterWizard";
 import SkillCatalog from "./pages/SkillCatalog";
 import SkillDetail from "./pages/SkillDetail";
 import NewSkillWizard from "./pages/NewSkillWizard";
+import MCPDetail from "./pages/MCPDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
               <main className="flex-1">
                 <Routes>
                   <Route path="/" element={<MCPCatalog />} />
+                  <Route path="/mcp/:id" element={<MCPDetail />} />
                   <Route path="/register/guided" element={<GuidedCreate />} />
                   <Route path="/register/wizard" element={<RegisterWizard />} />
                   <Route path="/skills" element={<SkillCatalog />} />
