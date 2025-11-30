@@ -38,6 +38,10 @@ export function NewSkillWizard({ open, onOpenChange }: NewSkillWizardProps) {
     description: "",
     risk_type: "",
     mcp_server_id: "",
+    metadata: "",
+    related_questions: "",
+    tools_associated: "",
+    few_shot_examples: "",
     input_schema: "",
     output_schema: "",
     data_sensitivity: "",
@@ -45,7 +49,7 @@ export function NewSkillWizard({ open, onOpenChange }: NewSkillWizardProps) {
     allowed_contexts: [] as string[],
   });
 
-  const isStep1Valid = formData.name && formData.description && formData.risk_type && formData.mcp_server_id;
+  const isStep1Valid = formData.name && formData.description && formData.risk_type && formData.mcp_server_id && formData.related_questions;
 
   const handleNext = () => {
     if (step < 5) setStep(step + 1);
@@ -74,6 +78,10 @@ export function NewSkillWizard({ open, onOpenChange }: NewSkillWizardProps) {
       description: "",
       risk_type: "",
       mcp_server_id: "",
+      metadata: "",
+      related_questions: "",
+      tools_associated: "",
+      few_shot_examples: "",
       input_schema: "",
       output_schema: "",
       data_sensitivity: "",
@@ -146,7 +154,7 @@ export function NewSkillWizard({ open, onOpenChange }: NewSkillWizardProps) {
 
               <div>
                 <Label htmlFor="mcp-server">
-                  Attach to MCP Server <span className="text-destructive">*</span>
+                  Associated MCP Server <span className="text-destructive">*</span>
                 </Label>
                 <Select
                   value={formData.mcp_server_id}
@@ -163,6 +171,52 @@ export function NewSkillWizard({ open, onOpenChange }: NewSkillWizardProps) {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="metadata">Metadata</Label>
+                <Textarea
+                  id="metadata"
+                  placeholder="Add additional metadata or context for this skill"
+                  rows={2}
+                  value={formData.metadata}
+                  onChange={(e) => setFormData({ ...formData, metadata: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="related-questions">
+                  Related Questions or User Prompts <span className="text-destructive">*</span>
+                </Label>
+                <Textarea
+                  id="related-questions"
+                  placeholder="Example prompts that would trigger this skill (one per line)"
+                  rows={3}
+                  value={formData.related_questions}
+                  onChange={(e) => setFormData({ ...formData, related_questions: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="tools-associated">Tools Associated</Label>
+                <Input
+                  id="tools-associated"
+                  placeholder="e.g., API Gateway, Database Client, etc."
+                  value={formData.tools_associated}
+                  onChange={(e) => setFormData({ ...formData, tools_associated: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="few-shot-examples">Examples for Few Shot</Label>
+                <Textarea
+                  id="few-shot-examples"
+                  placeholder="Provide example input/output pairs for this skill"
+                  rows={4}
+                  className="font-mono text-sm"
+                  value={formData.few_shot_examples}
+                  onChange={(e) => setFormData({ ...formData, few_shot_examples: e.target.value })}
+                />
               </div>
 
               <div>
