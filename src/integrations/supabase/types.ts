@@ -92,6 +92,7 @@ export type Database = {
         Row: {
           auth_type: string
           bu_id: string
+          business_unit: string | null
           business_use_case_id: string
           created_at: string | null
           description: string | null
@@ -102,6 +103,7 @@ export type Database = {
           name: string
           owner_email: string
           owner_team: string | null
+          product_name: string | null
           tags: string[] | null
           test_status: string | null
           updated_at: string | null
@@ -109,6 +111,7 @@ export type Database = {
         Insert: {
           auth_type?: string
           bu_id: string
+          business_unit?: string | null
           business_use_case_id: string
           created_at?: string | null
           description?: string | null
@@ -119,6 +122,7 @@ export type Database = {
           name: string
           owner_email: string
           owner_team?: string | null
+          product_name?: string | null
           tags?: string[] | null
           test_status?: string | null
           updated_at?: string | null
@@ -126,6 +130,7 @@ export type Database = {
         Update: {
           auth_type?: string
           bu_id?: string
+          business_unit?: string | null
           business_use_case_id?: string
           created_at?: string | null
           description?: string | null
@@ -136,6 +141,7 @@ export type Database = {
           name?: string
           owner_email?: string
           owner_team?: string | null
+          product_name?: string | null
           tags?: string[] | null
           test_status?: string | null
           updated_at?: string | null
